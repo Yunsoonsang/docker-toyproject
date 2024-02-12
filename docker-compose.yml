@@ -21,5 +21,6 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
+      - /run/udev/data:/run/udev/data
     ports:
       - "8000:8080"

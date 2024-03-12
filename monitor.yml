@@ -1,0 +1,71 @@
+version: "3.7"
+
+services:
+  metheus_node:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - bg_deploy
+      - cn_deploy
+      - monitor
+    volumes:
+      - prometheus_node:/prometheus
+      - ./conf_node/:/etc/prometheus/
+    restart: always
+
+  metheus_cad:
+    image: prom/prometheus:latest
+    ports:
+      - "9092:9090"
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - bg_deploy
+      - cn_deploy
+      - monitor
+    volumes:
+      - prometheus_cad:/prometheus
+      - ./conf_cad/:/etc/prometheus/
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - metheus_node
+      - metheus_cad
+    ports:
+      - "3000:3000"
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=test123
+    networks:
+      - monitor
+    volumes:
+      - grafana_vol:/var/lib/grafana
+
+networks:
+  bg_deploy:
+    external: true
+  cn_deploy:
+    external: true
+  monitor:
+    external: true
+
+volumes:
+  prometheus_node:
+    external: true
+  prometheus_cad:
+    external: true
+  grafana_vol:
+    external: true

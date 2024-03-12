@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'my-monitor'
+scrape_configs:
+  - job_name: 'CAdvisor'
+    static_configs:
+      - targets: 
+        - '211.183.3.101:8000'
+        - '211.183.3.102:8000'
+        - '211.183.3.103:8000'

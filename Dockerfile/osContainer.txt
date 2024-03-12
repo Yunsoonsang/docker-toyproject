@@ -1,0 +1,12 @@
+# Dockerfile
+FROM centos:7
+
+RUN yum clean all && \
+    yum -y update && \
+    yum -y install haproxy
+
+COPY haproxy_green.cfg /etc/haproxy/haproxy.cfg
+
+EXPOSE 80
+
+CMD ["haproxy", "-f", "/etc/haproxy/haproxy.cfg", "-db"]

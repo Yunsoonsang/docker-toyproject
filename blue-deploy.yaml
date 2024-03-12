@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  blue:
+    image: andrewyss/deploytest:blue
+    deploy:
+      replicas: 20
+      placement:
+        constraints: [node.role != manager]
+    environment:
+      SERVICE_PORTS: 80
+    networks:
+      - bg_deploy
+
+  proxy:
+    image: andrewyss/proxy:blue
+    depends_on:
+      - blue
+      - green
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - bg_deploy
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  bg_deploy:
+    external: true

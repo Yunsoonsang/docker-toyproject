@@ -1,0 +1,15 @@
+FROM nginx:latest
+
+# 필요한 패키지 업데이트 및 설치
+RUN apt-get update && apt-get install -y wget
+
+# GitHub에서 파일 다운로드
+RUN wget https://raw.githubusercontent.com/Yunsoonsang/docker-toyproject/master/new/canary_index.html -O /usr/share/nginx/html/index.html
+
+# 필요한 작업 수행 (예: Nginx 설정 등)
+
+# 이미지 빌드 시 사용할 포트 지정
+EXPOSE 80
+
+# nginx 실행
+CMD ["nginx", "-g", "daemon off;"]

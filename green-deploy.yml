@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  green:
+    image: andrewyss/deploytest:green
+    deploy:
+      replicas: 20
+      placement:
+        constraints: [node.role != manager]
+    environment:
+      SERVICE_PORTS: 80
+    networks:
+      - bg_deploy
+
+networks:
+  bg_deploy:
+    external: true

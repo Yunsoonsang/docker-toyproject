@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'my-monitor'
+scrape_configs:
+  - job_name: 'CAdvisor'
+    static_configs:
+      - targets: 
+        - '211.183.3.101:8000'
+        - '211.183.3.102:8000'
+        - '211.183.3.103:8000'
+
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  external_labels:
+    monitor: 'my-monitor'
+
+scrape_configs:
+  - job_name: 'node-exporter'
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        - '211.183.3.100:9100'
+        - '211.183.3.101:9100'
+        - '211.183.3.102:9100'
+        - '211.183.3.103:9100'

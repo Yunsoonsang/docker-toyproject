@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  canary:
+    image: andrewyss/deploytest:cnb
+    deploy:
+      replicas: 5
+      placement:
+        constraints: [node.labels.deployment.type == canary]
+    environment:
+      SERVICE_PORTS: 80
+    networks:
+      - cn_deploy
+
+  normal:
+    image: andrewyss/deploytest:cnb
+    deploy:
+      replicas: 15
+      placement:
+        constraints: [node.labels.deployment.type == normal]
+    environment:
+      SERVICE_PORTS: 80
+    networks:
+      - cn_deploy
+
+  proxy:
+    image: andrewyss/canary:default
+    depends_on:
+      - normal
+      - canary
+    ports:
+      - "81:80"
+      - "8081:8080"
+    networks:
+      - cn_deploy
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - "node.role == manager"
+
+networks:
+  cn_deploy:
+    external: true
